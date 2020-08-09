@@ -1,8 +1,10 @@
-#include "glad.h"
+#include "Common.h"
 
 #include "glfw3.h"
 #include "iostream"
 #include "glm/glm.hpp"
+
+#include "ShaderProgram.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -18,6 +20,13 @@ void processInput(GLFWwindow* window)
 	{
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
+}
+
+void initShaderProgram(ShaderProgram& program)
+{
+	program.loadShader("Shaders/sample.vert");
+	program.loadShader("Shaders/sample.frag");
+	program.linkShaders();
 }
 
 int main()
@@ -62,6 +71,9 @@ int main()
 		0, 1, 2,
 		0, 2, 3
 	};
+
+	//ShaderProgram shaderProg;
+	//initShaderProgram(shaderProg);
 
 	// Shader relevant part
 	const char* vertexShaderCode =
