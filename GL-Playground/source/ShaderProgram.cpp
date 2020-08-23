@@ -75,6 +75,54 @@ void ShaderProgram::useProgram()
 	glUseProgram(_program);
 }
 
+void ShaderProgram::setUniform(const char* name, bool b)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, int i)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, GLuint ui)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, float x)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, float x, float y)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, float x, float y, float z)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, float x, float y, float z, float w)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, const glm::vec2& v)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, const glm::vec3& v)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, const glm::vec4& v)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, const glm::mat3& m)
+{
+}
+
+void ShaderProgram::setUniform(const char* name, const glm::mat4& m)
+{
+}
+
 void ShaderProgram::checkShaderCompilation(GLuint shader, const std::string &typeName)
 {
 	int success;

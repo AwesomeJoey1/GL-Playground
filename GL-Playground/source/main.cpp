@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 
 #include "ShaderProgram.h"
+#include "../VBOs/Plane.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -58,38 +59,10 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
-
-	// Vertex setup
-	float vertices[] = {
-		-0.7f, -0.7f, 0.0f,
-		0.7f, -0.7f, 0.0f,
-		0.7f, 0.7f, 0.0f,
-		-0.7f, 0.7f, 0.0f
-	};
-
-	unsigned int indices[] = {
-		0, 1, 2,
-		0, 2, 3
-	};
+	Plane plane(glm::vec3(0, 0, 0), 0.7f, 0.7f);
 
 	ShaderProgram shaderProg;
 	initShaderProgram(shaderProg);
-
-	GLuint vao;
-	GLuint vbo, ebo;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
 	
 	// Enable wireframe drawing. Set back to default rendering with glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	// Might be useful inside GameLoop when rendering specific polygons with lines
@@ -108,9 +81,7 @@ int main()
 		processInput(window);
 
 		shaderProg.useProgram();
-		glBindVertexArray(vao);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
+		plane.render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
