@@ -26,7 +26,7 @@ void initShaderProgram(ShaderProgram& program)
 {
 	program.loadShader("Shaders/sample.vert");
 	program.loadShader("Shaders/sample.frag");
-	program.linkShaders();
+	program.linkProgram();
 }
 
 int main()
@@ -37,6 +37,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Playground", NULL, NULL);
 
@@ -59,7 +60,6 @@ int main()
 
 
 	// Vertex setup
-
 	float vertices[] = {
 		-0.7f, -0.7f, 0.0f,
 		0.7f, -0.7f, 0.0f,
@@ -72,76 +72,8 @@ int main()
 		0, 2, 3
 	};
 
-	//ShaderProgram shaderProg;
-	//initShaderProgram(shaderProg);
-
-	// Shader relevant part
-	const char* vertexShaderCode =
-		"#version 430\n"
-		"layout(location=0) in vec3 Position;\n"
-		"void main() {\n"
-		"gl_Position = vec4(Position.x, Position.y, Position.z, 1.0);\n"
-		"}\0"
-		;
-
-	const char* fragShaderCode =
-		"#version 430\n"
-		"out vec4 FragColor;"
-		"void main() {\n"
-		"FragColor = vec4(0.1, 0.2, 0.8, 1.0);\n"
-		"}\0";
-
-	GLuint vertShader;
-	vertShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertShader, 1, &vertexShaderCode, NULL);
-	glCompileShader(vertShader);
-
-	// checking for compile errors
-	int success;
-	char infoLog[512];
-	glGetShaderiv(vertShader, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(vertShader, 512, NULL, infoLog);
-		std::cerr << "SHADER COMPILE ERROR: " << infoLog << "\n";
-	}
-
-	GLuint fragShader;
-	fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragShader, 1, &fragShaderCode, NULL);
-	glCompileShader(fragShader);
-
-
-	// checking for compile errors
-	int fragSuccess;
-	char fragInfoLog[512];
-	glGetShaderiv(fragShader, GL_COMPILE_STATUS, &fragSuccess);
-
-	if (!fragSuccess)
-	{
-		glGetShaderInfoLog(fragShader, 512, NULL, fragInfoLog);
-		std::cerr << "FRAG SHADER COMPILE ERROR: " << fragInfoLog << "\n";
-	}
-
-	// Linking shaders and creating shader program
-	GLuint shaderProgram;
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertShader);
-	glAttachShader(shaderProgram, fragShader);
-	glLinkProgram(shaderProgram);
-
-	int programSuccess;
-	char programInfoLog[512];
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &programSuccess);
-
-	if (!programSuccess) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, programInfoLog);
-		std::cerr << "SHADER PROGRAM LINK ERROR: " << programInfoLog << "\n";
-	}
-
-	glDeleteShader(vertShader);
-	glDeleteShader(fragShader);
+	ShaderProgram shaderProg;
+	initShaderProgram(shaderProg);
 
 	GLuint vao;
 	GLuint vbo, ebo;
@@ -162,7 +94,7 @@ int main()
 	// Enable wireframe drawing. Set back to default rendering with glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	// Might be useful inside GameLoop when rendering specific polygons with lines
 	// OR in the process input to make it toggleable
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 	/*
 	######################################################################################
@@ -175,7 +107,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 		processInput(window);
 
-		glUseProgram(shaderProgram);
+		shaderProg.useProgram();
 		glBindVertexArray(vao);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
