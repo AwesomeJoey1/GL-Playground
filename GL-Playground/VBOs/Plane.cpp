@@ -20,6 +20,8 @@ Plane::Plane(const glm::vec3& min, const glm::vec3& max)
 	_vertices.push_back(min + glm::vec3(0, max.y, 0));		// upper left
 	_vertices.push_back(max - glm::vec3(0, min.y, 0));		// lower right
 	_vertices.push_back(max);								// upper right
+
+	init();
 }
 
 void Plane::render()

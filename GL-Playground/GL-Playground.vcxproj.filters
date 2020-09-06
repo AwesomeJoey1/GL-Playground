@@ -33,6 +33,12 @@
     <ClCompile Include="VBOs\Plane.cpp">
       <Filter>VBOs</Filter>
     </ClCompile>
+    <ClCompile Include="source\Camera.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="VBOs\Cube.cpp">
+      <Filter>VBOs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\sample.vert">
@@ -50,6 +56,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="VBOs\Plane.h">
+      <Filter>VBOs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="VBOs\Cube.h">
       <Filter>VBOs</Filter>
     </ClInclude>
   </ItemGroup>

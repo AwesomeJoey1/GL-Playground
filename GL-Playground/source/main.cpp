@@ -4,8 +4,10 @@
 #include "iostream"
 #include "glm/glm.hpp"
 
+#include "Camera.h"
 #include "ShaderProgram.h"
 #include "../VBOs/Plane.h"
+#include "../VBOs/Cube.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -59,10 +61,15 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
+	Camera camera(glm::vec3(4, 4, 3), glm::vec3(0, 0, -1), 800, 600);
+
 	Plane plane(glm::vec3(0, 0, 0), 0.7f, 0.7f);
+	Cube cube(glm::vec3(-0.5f), glm::vec3(0.5f));
 
 	ShaderProgram shaderProg;
 	initShaderProgram(shaderProg);
+	glm::mat4 mvp = camera.getViewProjectionMatrix();
+	
 	
 	// Enable wireframe drawing. Set back to default rendering with glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	// Might be useful inside GameLoop when rendering specific polygons with lines
@@ -81,7 +88,9 @@ int main()
 		processInput(window);
 
 		shaderProg.useProgram();
-		plane.render();
+		shaderProg.setUniform("MVP", mvp);
+		//plane.render();
+		cube.render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

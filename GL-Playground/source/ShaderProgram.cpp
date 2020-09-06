@@ -121,6 +121,8 @@ void ShaderProgram::setUniform(const char* name, const glm::mat3& m)
 
 void ShaderProgram::setUniform(const char* name, const glm::mat4& m)
 {
+	GLuint mID = glGetUniformLocation(_program, name);
+	glUniformMatrix4fv(mID, 1, GL_FALSE, &m[0][0]);
 }
 
 void ShaderProgram::checkShaderCompilation(GLuint shader, const std::string &typeName)
