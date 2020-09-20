@@ -60,7 +60,7 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
-	Camera camera(glm::vec3(4, 4, 2), glm::vec3(0, 0, -1), 800, 600);
+	Camera camera(glm::vec3(0, 5, 2), glm::vec3(0, 0, -1), 800, 600);
 
 	Plane plane(glm::vec3(0, 0, 0), 0.7f, 0.7f);
 	Cube cube;
@@ -71,9 +71,14 @@ int main()
 	glm::mat4 mvp = camera.getViewProjectionMatrix();
 	glm::mat3 normalMatrix = camera.getNormalMatrix();
 
-	shaderProg.setUniform("Kd", 0.9f, 0.5f, 0.3f);
-	shaderProg.setUniform("Ld", 1.0f, 1.0f, 1.0f);
-	shaderProg.setUniform("LightPosition", mv * glm::vec4(5.0f, 5.0f, 2.0f, 1.0f));
+	shaderProg.setUniform("Material.Kd", 0.9f, 0.5f, 0.3f);
+	shaderProg.setUniform("Light.Ld", 1.0f, 1.0f, 1.0f);
+	shaderProg.setUniform("Material.Ka", 0.9f, 0.5f, 0.3f);
+	shaderProg.setUniform("Light.La", 0.4f, 0.4f, 0.4f);
+	shaderProg.setUniform("Material.Ks", 0.8f, 0.8f, 0.8f);
+	shaderProg.setUniform("Light.Ls", 1.0f, 1.0f, 1.0f);
+	shaderProg.setUniform("Material.Shininess", 20.0f);
+	shaderProg.setUniform("Light.Position", mv * glm::vec4(0.0f, 5.0f, 0.0f, 1.0f));
 	
 	
 	// Enable wireframe drawing. Set back to default rendering with glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

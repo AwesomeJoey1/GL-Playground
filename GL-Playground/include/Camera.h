@@ -20,7 +20,6 @@ public:
 		_viewMatrix = glm::lookAt(_eye, glm::vec3(0), glm::vec3(0, 1, 0));
 		_projectionMatrix = glm::perspective(glm::radians(_vFoV), _aspect, _nearClip, _farClip);
 		_normalMatrix = glm::inverseTranspose(glm::mat3(_viewMatrix));
-		//_normalMatrix = glm::mat3(glm::vec3(_viewMatrix[0]), glm::vec3(_viewMatrix[1]), glm::vec3(_viewMatrix[2]));
 			
 	}
 
