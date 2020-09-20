@@ -17,6 +17,7 @@ private:
 	GLuint _vao;
 
 	void init();
-	std::vector<glm::vec3> _vertices;
+	std::vector<glm::vec3> _vertices, _normals;
+	std::vector<glm::vec2> _textureCoords;
 	std::vector<unsigned int> _indices;
 };

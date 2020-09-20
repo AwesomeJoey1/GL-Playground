@@ -77,46 +77,68 @@ void ShaderProgram::useProgram()
 
 void ShaderProgram::setUniform(const char* name, bool b)
 {
+	GLuint bID = glGetUniformLocation(_program, name);
+	glUniform1i(bID, b);
 }
 
 void ShaderProgram::setUniform(const char* name, int i)
 {
+	GLuint iID = glGetUniformLocation(_program, name);
+	glUniform1i(iID, i);
 }
 
 void ShaderProgram::setUniform(const char* name, GLuint ui)
 {
+	GLuint uiID = glGetUniformLocation(_program, name);
+	glUniform1ui(uiID, ui);
 }
 
 void ShaderProgram::setUniform(const char* name, float x)
 {
+	GLuint fID = glGetUniformLocation(_program, name);
+	glUniform1f(fID, x);
 }
 
 void ShaderProgram::setUniform(const char* name, float x, float y)
 {
+	GLuint vID = glGetUniformLocation(_program, name);
+	glUniform2f(vID, x, y);
 }
 
 void ShaderProgram::setUniform(const char* name, float x, float y, float z)
 {
+	GLuint vID = glGetUniformLocation(_program, name);
+	glUniform3f(vID, x, y, z);
 }
 
 void ShaderProgram::setUniform(const char* name, float x, float y, float z, float w)
 {
+	GLuint vID = glGetUniformLocation(_program, name);
+	glUniform4f(vID, x, y, z, w);
 }
 
 void ShaderProgram::setUniform(const char* name, const glm::vec2& v)
 {
+	GLuint vID = glGetUniformLocation(_program, name);
+	glUniform2f(vID, v.x, v.y);
 }
 
 void ShaderProgram::setUniform(const char* name, const glm::vec3& v)
 {
+	GLuint vID = glGetUniformLocation(_program, name);
+	glUniform3f(vID, v.x, v.y, v.z);
 }
 
 void ShaderProgram::setUniform(const char* name, const glm::vec4& v)
 {
+	GLuint vID = glGetUniformLocation(_program, name);
+	glUniform4f(vID, v.x, v.y, v.z, v.w);
 }
 
 void ShaderProgram::setUniform(const char* name, const glm::mat3& m)
 {
+	GLuint mID = glGetUniformLocation(_program, name);
+	glUniformMatrix3fv(mID, 1, GL_FALSE, &m[0][0]);
 }
 
 void ShaderProgram::setUniform(const char* name, const glm::mat4& m)

@@ -30,12 +30,11 @@ void initShaderProgram(ShaderProgram& program)
 	program.loadShader("Shaders/sample.vert");
 	program.loadShader("Shaders/sample.frag");
 	program.linkProgram();
+	program.useProgram();
 }
 
 int main()
 {
-	glm::vec3 a = glm::vec3(0, 0, 1);
-
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -61,14 +60,20 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
-	Camera camera(glm::vec3(4, 4, 3), glm::vec3(0, 0, -1), 800, 600);
+	Camera camera(glm::vec3(4, 4, 2), glm::vec3(0, 0, -1), 800, 600);
 
 	Plane plane(glm::vec3(0, 0, 0), 0.7f, 0.7f);
-	Cube cube(glm::vec3(-0.5f), glm::vec3(0.5f));
+	Cube cube;
 
 	ShaderProgram shaderProg;
 	initShaderProgram(shaderProg);
+	glm::mat4 mv = camera.getViewMatrix();
 	glm::mat4 mvp = camera.getViewProjectionMatrix();
+	glm::mat3 normalMatrix = camera.getNormalMatrix();
+
+	shaderProg.setUniform("Kd", 0.9f, 0.5f, 0.3f);
+	shaderProg.setUniform("Ld", 1.0f, 1.0f, 1.0f);
+	shaderProg.setUniform("LightPosition", mv * glm::vec4(5.0f, 5.0f, 2.0f, 1.0f));
 	
 	
 	// Enable wireframe drawing. Set back to default rendering with glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -81,14 +86,18 @@ int main()
 	################ GAME LOOP ###########################################################
 	######################################################################################
 	*/
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.7f, 0.4f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		processInput(window);
 
-		shaderProg.useProgram();
+		
+		shaderProg.setUniform("ModelViewMatrix", mv);
 		shaderProg.setUniform("MVP", mvp);
+		shaderProg.setUniform("NormalMatrix", normalMatrix);
 		//plane.render();
 		cube.render();
 
@@ -98,8 +107,6 @@ int main()
 	/*
 	######################################################################################
 	*/
-
-	std::cout << "Hello world: " << a.x << " " << a.y << " " << a.z << "\n";
 	glfwTerminate();
 	return 0;
 }

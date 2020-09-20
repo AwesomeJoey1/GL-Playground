@@ -16,3 +16,8 @@ const glm::mat4& Camera::getViewProjectionMatrix()
 	return _projectionMatrix *_viewMatrix;
 }
 
+const glm::mat3& Camera::getNormalMatrix()
+{
+	return _normalMatrix;
+}
+
