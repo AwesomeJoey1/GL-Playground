@@ -77,7 +77,7 @@ int main()
 	shaderProg.setUniform("Light.La", 0.4f, 0.4f, 0.4f);
 	shaderProg.setUniform("Material.Ks", 0.8f, 0.8f, 0.8f);
 	shaderProg.setUniform("Light.Ls", 1.0f, 1.0f, 1.0f);
-	shaderProg.setUniform("Material.Shininess", 20.0f);
+	shaderProg.setUniform("Material.Shininess", 50.0f);
 	shaderProg.setUniform("Light.Position", mv * glm::vec4(0.0f, 5.0f, 0.0f, 1.0f));
 	
 	
