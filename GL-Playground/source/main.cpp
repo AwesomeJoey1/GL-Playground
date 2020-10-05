@@ -12,16 +12,73 @@
 #define WIDTH 800
 #define HEIGHT 600
 
+float _lastFrame = 0.0f;
+float _deltaTime = 0.0f;
+float lastX = WIDTH / 2;
+float lastY = HEIGHT / 2;
+bool firstMouse = true;
+
+// This needs to go ASAP to a InputController
+Camera camera(glm::vec3(0, 0, 3), glm::vec3(0, 0, -1), 800, 600);
+
+void mouseCallback(GLFWwindow* window, double x, double y)
+{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+	{
+		if (firstMouse)
+		{
+			lastX = x;
+			lastY = y;
+			firstMouse = false;
+		}
+		float mouseSensitivity = 0.01f;
+		float xDiff = x - lastX;
+		float yDiff = lastY - y; // reversed screen space
+
+		lastX = x;
+		lastY = y;
+
+		camera.rotate(glm::vec3(1, 0, 0), -mouseSensitivity * yDiff);
+		camera.rotate(glm::vec3(0, 1, 0), mouseSensitivity * xDiff);
+	}
+}
+
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
 
-void processInput(GLFWwindow* window)
+void processInput(GLFWwindow* window, Camera& camera)
 {
+	float moveSpeed = 2.5f * _deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		camera.move(glm::vec3(0, 0, -moveSpeed));
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		camera.move(glm::vec3(0, 0, moveSpeed));
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		camera.move(glm::vec3(-moveSpeed, 0, 0));
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		camera.move(glm::vec3(moveSpeed, 0, 0));
+	}
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+	{
+		camera.move(glm::vec3(0, moveSpeed, 0));
+	}
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+	{
+		camera.move(glm::vec3(0, -moveSpeed, 0));
 	}
 }
 
@@ -59,17 +116,17 @@ int main()
 	}
 
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+	glfwSetCursorPosCallback(window, mouseCallback);
 
-	Camera camera(glm::vec3(0, 5, 2), glm::vec3(0, 0, -1), 800, 600);
+	
 
 	Plane plane(glm::vec3(0, 0, 0), 0.7f, 0.7f);
 	Cube cube;
 
 	ShaderProgram shaderProg;
 	initShaderProgram(shaderProg);
-	glm::mat4 mv = camera.getViewMatrix();
-	glm::mat4 mvp = camera.getViewProjectionMatrix();
-	glm::mat3 normalMatrix = camera.getNormalMatrix();
+	glm::mat4 mv, mvp;
+	glm::mat3 normalMatrix;
 
 	shaderProg.setUniform("Material.Kd", 0.9f, 0.5f, 0.3f);
 	shaderProg.setUniform("Light.Ld", 1.0f, 1.0f, 1.0f);
@@ -95,11 +152,18 @@ int main()
 	glCullFace(GL_BACK);
 	while (!glfwWindowShouldClose(window))
 	{
+		float currentFrame = glfwGetTime();
+		_deltaTime = currentFrame - _lastFrame;
+		_lastFrame = currentFrame;
+
 		glClearColor(0.7f, 0.4f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		processInput(window);
-
 		
+		processInput(window, camera);
+
+		mv = camera.getViewMatrix();
+		mvp = camera.getViewProjectionMatrix();
+		normalMatrix = camera.getNormalMatrix();
 		shaderProg.setUniform("ModelViewMatrix", mv);
 		shaderProg.setUniform("MVP", mvp);
 		shaderProg.setUniform("NormalMatrix", normalMatrix);
